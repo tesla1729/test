@@ -12,12 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: create pull request
+        run: gh pr create -B develop -H main --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3.11.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Merge master into develop"
-          base: "develop"
-          title: "Merge master into develop"
-          body: "This pull request merges changes from the master branch into the develop branch."
