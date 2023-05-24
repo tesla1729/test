@@ -8,12 +8,20 @@ on:
 jobs:
   raise-pr:
     runs-on: ubuntu-latest
-
+    env:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: create pull request
-        run: gh pr create -B develop -H main --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: Set Git config
+        run: |
+          git config --local user.email "vanaparthy.rajkumar@gmail.com"
+          git config --local user.name "tesla1729"
+      - name: Merge main back to develop
+        run: |
+          git fetch --unshallow
+          git checkout develop
+          git pull
+          git merge --no-ff ${{ github.base_ref }} -m "Auto-merge master/main back to develop"
+          git push --force
+
 
